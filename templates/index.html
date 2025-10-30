@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Diagnosis Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+            const form = document.getElementById('urlForm');
+            const formData = new FormData(form);
+
+            const actionUrl = "{{ url_for('start_diagnosis') }}";  // The action URL of the form
+
+            fetch(actionUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Redirect to the waiting page with the job_id
+                window.location.href = `/waiting/${data.job_id}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Diagnosis Tool</h1>
+        <form id="urlForm" onsubmit="submitForm(event)">
+            <label for="urls">Paste URLs (each URL on a new line):</label><br>
+            <textarea name="urls" id="urls" rows="10" cols="30"></textarea><br>
+            <input type="submit" value="Diagnose URLs">
+        </form>
+    </div>
+</body>
+</html>

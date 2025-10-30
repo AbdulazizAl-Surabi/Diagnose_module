@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosis Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='results.css') }}">
+    <script src="{{ url_for('static', filename='js/filter.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Download Button Container -->
+        <div class="download-container">
+            <img src="{{ url_for('static', filename='download.png') }}" alt="Download" class="download-button">
+        </div>
+
+        <div class="filter-container">
+            <img src="{{ url_for('static', filename='filter.png') }}" class="filter-icon" onclick="toggleFilterPanel()">
+            <div id="filterPanel" class="filter-panel">
+                <div onclick="applyFilter('success')">
+                    <img src="{{ url_for('static', filename='tick.png') }}" class="status-icon"> Success
+                </div>
+                <div onclick="applyFilter('warning')">
+                    <img src="{{ url_for('static', filename='yellow.png') }}" class="status-icon"> Warning
+                </div>
+                <div onclick="applyFilter('error')">
+                    <img src="{{ url_for('static', filename='kreuz.png') }}" class="status-icon"> Error
+                </div>
+                <div onclick="applyFilter('all')">
+                    <span>Show All</span>
+                </div>
+            </div>
+        </div>
+
+        <h1>Diagnosis Results</h1>
+        
+        <!-- Fixed Header Row with URL added -->
+        <div class="fixed-header">
+            <div class="header-cell url-header">URL</div>
+            <div class="header-cell">Connection</div>
+            <div class="header-cell">robots.txt</div>
+            <div class="header-cell">Sitemap</div>
+        </div>
+
+        {% if results %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>Connection</th>
+                            <th>robots.txt</th>
+                            <th>Sitemap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr class="clickable" onclick="toggleRowDetails(event)">
+                            <td class="url-cell">
+                                <img src="{{ url_for('static', filename='dropdown_arrow.png') }}" class="arrow">
+                                {{ result['url'] }}
+                            </td>
+                            <td>
+                                {% if 'successful' in result['connection'].lower() %}
+                                    <img src="{{ url_for('static', filename='tick.png') }}" alt="Success" class="status-icon">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='kreuz.png') }}" alt="Failed" class="status-icon">
+                                {% endif %}
+                                <div class="hidden-content">{{ result['connection'] | safe }}</div>
+                            </td>
+                            <td>
+                                {% if 'successfully retrieved' in result['robots_txt'].lower() %}
+                                    <img src="{{ url_for('static', filename='tick.png') }}" alt="Success" class="status-icon">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='kreuz.png') }}" alt="Failed" class="status-icon">
+                                {% endif %}
+                                <div class="hidden-content">{{ result['robots_txt'] | safe }}</div>
+                            </td>
+                            <td>
+                                {% if 'successfully parsed' in result['sitemap'].lower() and 'error' in result['sitemap'].lower() %}
+                                    <img src="{{ url_for('static', filename='yellow.png') }}" class="status-icon">
+                                {% elif 'successfully parsed' in result['sitemap'].lower() %}
+                                    <img src="{{ url_for('static', filename='tick.png') }}" class="status-icon">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='kreuz.png') }}" class="status-icon">
+                                {% endif %}
+                                <div class="hidden-content">{{ result['sitemap'] | safe }}</div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>No results available.</p>
+        {% endif %}
+        <br>
+        <div class="button-container">
+            <a href="{{ url_for('index') }}" class="button new-button">New Diagnosis</a>
+        </div>
+    </div>
+</body>
+</html>

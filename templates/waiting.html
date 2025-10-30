@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosing URLs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='waiting.css') }}">
+    <script>
+        function checkJobCompletion() {
+            console.log('Starting job completion check...');
+            fetch(`/check_total_urls/{{ job_id }}?t=${new Date().getTime()}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Total URLs data:', data);
+                if (data.success) {
+                    const totalUrls = parseInt(data.total_urls);
+                    fetch(`/check_status/{{ job_id }}?t=${new Date().getTime()}`)
+                    .then(response => response.json())
+                    .then(statusData => {
+                        console.log('Status data:', statusData);
+                        if (statusData.done) {
+                            console.log('Job completed, initiating redirect...');
+                            window.location.href = `/diagnose_urls/{{ job_id }}`;
+                        } else {
+                            console.log('Job not completed, retrying...');
+                            setTimeout(checkJobCompletion, 2000); // Retry after 2 seconds
+                        }
+                    });
+                } else {
+                    console.log('Total URLs not set yet, retrying...');
+                    setTimeout(checkJobCompletion, 2000); // Retry after 2 seconds
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded, starting job completion check...');
+            checkJobCompletion(); // Begin checking if the diagnosis is complete
+        });
+    </script>    
+</head>
+<body>
+    <div class="container">
+        <h1>Diagnosing URLs...</h1>
+        <div class="loader"></div>
+        <p>Please wait.</p>
+    </div>
+</body>
+</html>

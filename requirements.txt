@@ -1,0 +1,6 @@
+flask
+redis
+xmltodict
+beautifulsoup4
+requests
+redlock-py

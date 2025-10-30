@@ -1,0 +1,286 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    position: relative;  /* Stelle sicher, dass das Dropdown-Panel relativ zum Container positioniert ist */
+    background-color: #ffffff;
+    padding: 10px 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 100%;
+    max-height: 95vh;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Download Button Container */
+.download-container {
+    position: absolute;
+    top: 10px; /* Abstand von oben */
+    right: 10px; /* Abstand von rechts */
+    z-index: 1000;
+    background-color: #ffffff; /* Hintergrundfarbe des Containers */
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Schatteneffekt */
+}
+
+.download-button {
+    width: 30px; /* Breite des Download-Buttons */
+    height: 30px; /* Höhe des Download-Buttons */
+    cursor: pointer; /* Mauszeiger wird zur Hand, wenn über dem Bild */
+}
+
+.download-button:hover {
+    opacity: 0.8; /* Leichter Transparenzeffekt beim Hover */
+}
+
+/* Filter container styling */
+.filter-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: auto;  /* Start with auto width to fit the icon */
+    transition: width 0.3s ease;  /* Smooth transition when expanding */
+    overflow: hidden;
+}
+
+.filter-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.filter-panel {
+    display: none; /* Ensure it's hidden by default */
+    flex-direction: row;  /* Horizontal layout for buttons */
+    margin-left: 5px;  /* Slight spacing between the icon and buttons */
+}
+
+.filter-panel div {
+    margin-right: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+}
+
+.filter-panel div:last-child {
+    margin-right: 0;
+}
+
+.filter-panel .active {
+    background-color: #dcdcdc;  /* Ein etwas dunklerer Grauton */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);  /* Vertiefter Look */
+}
+
+/* Status-Icon-Styling */
+.status-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.table-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #003366;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+thead {
+    display: none;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    vertical-align: middle;
+    background-color: transparent;
+}
+
+td.url-cell {
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.clickable {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #e0ebff;
+    border-radius: 12px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: auto;
+    min-height: 100px;
+    transition: height 0.3s ease;
+    box-sizing: border-box;
+}
+
+.clickable.expanded {
+    height: auto;
+}
+
+.clickable td {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-wrap: anywhere;
+}
+
+td.url-cell {
+    justify-content: flex-start;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #003366;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background-color: #0052cc;
+}
+
+td a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+.hidden-content {
+    display: none;
+    width: 100%;
+    padding-top: 10px;
+}
+
+.clickable.expanded .hidden-content {
+    display: block;
+}
+
+.arrow {
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    transition: transform 0.3s ease, height 0.3s ease;
+    vertical-align: middle;
+    transform: rotate(-90deg);
+}
+
+.clickable.expanded .arrow {
+    transform: rotate(0deg);
+}
+
+/* Fixed Header Styling */
+.fixed-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #003366;
+    color: white;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.header-cell {
+    flex-basis: 25%; /* Jedes Header-Element nimmt 25% des verfügbaren Platzes ein */
+    padding: 10px;
+    border-left: 1px solid #f4f4f9; /* Trennlinie nach links verschieben */
+    box-sizing: border-box;
+    margin-left: -10px; /* Verschiebt die Trennlinie weiter nach links */
+}
+
+.url-header {
+    flex-basis: 30%; /* Breitere Spalte für URLs */
+    margin-left: -10px; /* Verschiebt auch hier die Trennlinie weiter nach links */
+}
+
+.header-cell:first-child {
+    border-left: none; /* Entfernt die Grenze des ersten Headers */
+    margin-left: 0; /* Keine Verschiebung für das erste Header-Element */
+}
+
+.clickable td {
+    flex-basis: 25%; /* Zellen in der Tabelle nehmen ebenfalls 25% des verfügbaren Platzes ein */
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-wrap: anywhere;
+}
+
+td.url-cell {
+    flex-basis: 30%; /* Breitere Spalte für URL-Zellen */
+    justify-content: flex-start;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.table-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
